@@ -12,21 +12,48 @@ class App extends Component {
       ["7", "8", "9", "*"],
       ["ans", "0", "=", "/"]
     ],
-    input: ""
+    input: "",
+    ans: []
   };
 
   handleButtonClick = char => {
     const input = this.state.input;
-    if (input == null) {
-      this.setState({ input: char });
+    if (char === "ans") {
+    } else if (char === "=") {
+      this.calculate(input);
     } else {
-      this.setState({ input: input + char });
+      if (input == null) {
+        this.setState({ input: char });
+      } else {
+        this.setState({ input: input + char });
+      }
     }
   };
 
   updateInput = input => {
     console.log(input);
     this.setState({ input: input });
+  };
+
+  calculate = input => {
+    const ans = this.state.ans;
+    console.log(ans);
+    console.log("calculate " + input);
+    try {
+      const result = eval(input);
+      if (ans.length < 5) {
+        this.setState(() => ({
+          ans: [...ans, input]
+        }));
+      } else {
+        this.setState(() => ({
+          ans: ans.slice(1, 5).concat(input)
+        }));
+      }
+      this.setState({ input: result });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   render() {
