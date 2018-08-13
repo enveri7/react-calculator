@@ -50,6 +50,14 @@ $button-char-color: rgb(255, 255, 255);
   line-height: 100px; /* the same as your div height */
 }
 
+.button-div:hover {
+  background: $background-hover;
+}
+
+.button-div:active {
+  background: rgb(120, 30, 78);
+}
+
 .buttons-container {
   margin: auto;
   width: 500px;
@@ -64,6 +72,6 @@ $button-char-color: rgb(255, 255, 255);
   font-size: 2em;
 }
 
-.button-div:hover {
-  background: $background-hover;
+.input-field:focus {
+  outline: none;
 }

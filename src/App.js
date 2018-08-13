@@ -27,6 +27,7 @@ class App extends Component {
       } else {
         this.setState({ input: input + char });
       }
+      document.getElementById("input-div").focus();
     }
   };
 
@@ -35,7 +36,7 @@ class App extends Component {
     this.setState({ input: input });
   };
 
-  calculate = input => {
+  calculate = (input = this.state.input) => {
     const ans = this.state.ans;
     console.log(ans);
     console.log("calculate " + input);
@@ -54,6 +55,7 @@ class App extends Component {
     } catch (err) {
       console.log(err);
     }
+    document.getElementById("input-div").focus();
   };
 
   render() {
@@ -63,7 +65,11 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <Input input={this.state.input} updateInput={this.updateInput} />
+        <Input
+          input={this.state.input}
+          updateInput={this.updateInput}
+          calculate={this.calculate}
+        />
         {this.state.buttons.map(list => (
           <div className="buttons-container" key={list[0]}>
             {list.map(char => (
