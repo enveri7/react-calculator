@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import Button from "./Button";
 import Input from "./Input";
@@ -17,6 +16,10 @@ class App extends Component {
     ans: {},
     ans_active: false
   };
+
+  componentDidMount() {
+    document.getElementById("input-div").focus();
+  }
 
   handleButtonClick = char => {
     const input = this.state.input;
@@ -42,15 +45,16 @@ class App extends Component {
   };
 
   updateInput = input => {
-    console.log(input);
     this.setState({ input: input });
     document.getElementById("input-div").focus();
   };
 
   calculate = (input = this.state.input) => {
+    if (input === "") {
+      return;
+    }
     // Take copy of existing state
     const ans = { ...this.state.ans };
-    console.log(ans[Object.keys(ans)[0]]);
     try {
       const result = eval(input);
       if (Object.keys(ans).length < 5) {
@@ -63,7 +67,7 @@ class App extends Component {
       }
       this.setState({ input: result });
     } catch (err) {
-      console.log(err);
+      console.log("can't calculate");
     }
     document.getElementById("input-div").focus();
   };
@@ -72,8 +76,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Simple Calc</h1>
         </header>
         <Input
           input={this.state.input}
