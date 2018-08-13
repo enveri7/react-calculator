@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import Button from "./Button";
 import Input from "./Input";
+import ListItem from "./ListItem";
 
 class App extends Component {
   state = {
@@ -13,12 +14,21 @@ class App extends Component {
       ["ans", "0", "=", "/"]
     ],
     input: "",
-    ans: []
+    ans: {},
+    ans_active: false
   };
 
   handleButtonClick = char => {
     const input = this.state.input;
     if (char === "ans") {
+      const div = document.getElementById("dropdown-content");
+      if (this.state.ans_active === false) {
+        div.classList.add("dropdown-content-active");
+        this.setState({ ans_active: true });
+      } else {
+        div.classList.remove("dropdown-content-active");
+        this.setState({ ans_active: false });
+      }
     } else if (char === "=") {
       this.calculate(input);
     } else {
@@ -34,22 +44,22 @@ class App extends Component {
   updateInput = input => {
     console.log(input);
     this.setState({ input: input });
+    document.getElementById("input-div").focus();
   };
 
   calculate = (input = this.state.input) => {
-    const ans = this.state.ans;
-    console.log(ans);
-    console.log("calculate " + input);
+    // Take copy of existing state
+    const ans = { ...this.state.ans };
+    console.log(ans[Object.keys(ans)[0]]);
     try {
       const result = eval(input);
-      if (ans.length < 5) {
-        this.setState(() => ({
-          ans: [...ans, input]
-        }));
+      if (Object.keys(ans).length < 5) {
+        ans[`ans_${Date.now()}`] = input;
+        this.setState({ ans });
       } else {
-        this.setState(() => ({
-          ans: ans.slice(1, 5).concat(input)
-        }));
+        delete ans[Object.keys(ans)[0]];
+        ans[`ans_${Date.now()}`] = input;
+        this.setState({ ans });
       }
       this.setState({ input: result });
     } catch (err) {
@@ -70,17 +80,32 @@ class App extends Component {
           updateInput={this.updateInput}
           calculate={this.calculate}
         />
-        {this.state.buttons.map(list => (
-          <div className="buttons-container" key={list[0]}>
-            {list.map(char => (
-              <Button
-                key={char}
-                char={char}
-                handleButtonClick={this.handleButtonClick}
-              />
+        <div className="dropdown">
+          <div>
+            {this.state.buttons.map(list => (
+              <div className="buttons-container" key={list[0]}>
+                {list.map(char => (
+                  <Button
+                    key={char}
+                    char={char}
+                    handleButtonClick={this.handleButtonClick}
+                  />
+                ))}
+              </div>
             ))}
+          </div>{" "}
+          <div id="dropdown-content" className="dropdown-content">
+            <ul>
+              {Object.keys(this.state.ans).map(key => (
+                <ListItem
+                  key={key}
+                  item={this.state.ans[key]}
+                  updateInput={this.updateInput}
+                />
+              ))}
+            </ul>
           </div>
-        ))}
+        </div>
       </div>
     );
   }
