@@ -13,7 +13,7 @@ class App extends Component {
       ["ans", "0", "=", "/"]
     ],
     input: "",
-    ans: {},
+    ans: [],
     ans_active: false
   };
 
@@ -54,15 +54,15 @@ class App extends Component {
       return;
     }
     // Take copy of existing state
-    const ans = { ...this.state.ans };
+    const ans = this.state.ans;
     try {
       const result = eval(input);
-      if (Object.keys(ans).length < 5) {
-        ans[`ans_${Date.now()}`] = input;
+      if (ans.length < 5) {
+        ans.unshift({ key: `ans_${Date.now()}`, value: input });
         this.setState({ ans });
       } else {
-        delete ans[Object.keys(ans)[0]];
-        ans[`ans_${Date.now()}`] = input;
+        ans.pop();
+        ans.unshift({ key: `ans_${Date.now()}`, value: input });
         this.setState({ ans });
       }
       this.setState({ input: result });
@@ -99,10 +99,10 @@ class App extends Component {
           </div>{" "}
           <div id="dropdown-content" className="dropdown-content">
             <ul>
-              {Object.keys(this.state.ans).map(key => (
+              {this.state.ans.map(item => (
                 <ListItem
-                  key={key}
-                  item={this.state.ans[key]}
+                  key={item.key}
+                  item={item.value}
                   updateInput={this.updateInput}
                 />
               ))}
