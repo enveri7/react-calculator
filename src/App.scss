@@ -153,19 +153,18 @@ ul {
 }
 
 .error-div {
+  font-weight: bold;
   -webkit-transition: all 0.2s, -webkit-transform 0.2s;
   transition: all 0.2s, transform 0.2s;
   background-color: #f44336; /* Red */
-  border: 2px solid rgb(217, 28, 28);
   color: white;
   height: 50px;
   text-align: center;
   vertical-align: middle;
   line-height: 50px;
-  border-radius: 5px;
   opacity: 0;
 }
 
 .error-active {
-  opacity: $opa;
+  opacity: 1;
 }
