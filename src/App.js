@@ -67,6 +67,13 @@ class App extends Component {
     const ans = this.state.ans;
     try {
       const result = eval(input);
+      if (result === undefined || result === null || result === "") {
+        this.setState({
+          error: true,
+          error_message: "Calculation cannot be performed"
+        });
+        return;
+      }
       if (ans.length < 5) {
         ans.unshift({ key: `ans_${Date.now()}`, value: input });
         this.setState({ ans });
