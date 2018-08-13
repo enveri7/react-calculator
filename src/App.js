@@ -12,8 +12,23 @@ class App extends Component {
       ["7", "8", "9", "*"],
       ["ans", "0", "=", "/"]
     ],
-    input: null
+    input: ""
   };
+
+  handleButtonClick = char => {
+    const input = this.state.input;
+    if (input == null) {
+      this.setState({ input: char });
+    } else {
+      this.setState({ input: input + char });
+    }
+  };
+
+  updateInput = input => {
+    console.log(input);
+    this.setState({ input: input });
+  };
+
   render() {
     return (
       <div className="App">
@@ -21,15 +36,16 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        {/* {this.state.buttons.map(char => (
-          <div className="buttons-container">
-            <Button key={char} char={char} />
-          </div>
-        ))} */}
-        <Input />
+        <Input input={this.state.input} updateInput={this.updateInput} />
         {this.state.buttons.map(list => (
           <div className="buttons-container" key={list[0]}>
-            {list.map(char => <Button key={char} char={char} />)}
+            {list.map(char => (
+              <Button
+                key={char}
+                char={char}
+                handleButtonClick={this.handleButtonClick}
+              />
+            ))}
           </div>
         ))}
       </div>
