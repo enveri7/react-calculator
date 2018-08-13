@@ -14,11 +14,21 @@ class App extends Component {
     ],
     input: "",
     ans: [],
-    ans_active: false
+    ans_active: false,
+    error: false,
+    error_message: ""
   };
 
   componentDidMount() {
     document.getElementById("input-div").focus();
+    const ans = localStorage.getItem("simplecalc-lc");
+    if (ans) {
+      this.setState({ ans: JSON.parse(ans) });
+    }
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem("simplecalc-lc", JSON.stringify(this.state.ans));
   }
 
   handleButtonClick = char => {
@@ -66,18 +76,40 @@ class App extends Component {
         this.setState({ ans });
       }
       this.setState({ input: result });
+      this.setState({
+        error: false,
+        error_message: ""
+      });
+      const div = document.getElementById("error_div");
+      div.classList.remove("error-active");
     } catch (err) {
-      console.log("can't calculate");
+      this.setState({
+        error: true,
+        error_message: "Calculation cannot be performed"
+      });
     }
     document.getElementById("input-div").focus();
   };
 
   render() {
+    let error_div = <div id="error_div" className="error-div" />;
+    if (this.state.error) {
+      error_div = (
+        <div id="error_div" className="error-div">
+          {this.state.error_message}
+        </div>
+      );
+      const div = document.getElementById("error_div");
+      if (div) {
+        div.classList.add("error-active");
+      }
+    }
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Simple Calc</h1>
         </header>
+        <div className="err">{error_div}</div>
         <Input
           input={this.state.input}
           updateInput={this.updateInput}
